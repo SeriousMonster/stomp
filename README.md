@@ -3,7 +3,9 @@
 An MCP server with 162 tools covering the full App Store Connect API.
 
 [![npm](https://img.shields.io/npm/v/@seriousmonster/app-store-connect-mcp)](https://www.npmjs.com/package/@seriousmonster/app-store-connect-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/@seriousmonster/app-store-connect-mcp)](https://www.npmjs.com/package/@seriousmonster/app-store-connect-mcp)
 [![license](https://img.shields.io/npm/l/@seriousmonster/app-store-connect-mcp)](./LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/SeriousMonster/stomp)](https://github.com/SeriousMonster/stomp)
 
 ## What is this?
 

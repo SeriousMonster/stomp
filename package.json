@@ -30,6 +30,14 @@
   ],
   "author": "seriousmonster",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SeriousMonster/stomp.git"
+  },
+  "homepage": "https://github.com/SeriousMonster/stomp",
+  "bugs": {
+    "url": "https://github.com/SeriousMonster/stomp/issues"
+  },
   "files": [
     "dist"
   ],
