@@ -31,7 +31,17 @@ Auth is handled automatically. See https://developer.apple.com/documentation/app
         ),
     },
     async ({ method, path, params, body }) => {
-      const parsedBody = body ? JSON.parse(body) : undefined;
+      let parsedBody: unknown;
+      if (body) {
+        try {
+          parsedBody = JSON.parse(body);
+        } catch {
+          return {
+            content: [{ type: "text" as const, text: `Error: Invalid JSON in request body: ${body}` }],
+            isError: true,
+          };
+        }
+      }
       const response = await apiRequest(method, path, parsedBody, params);
 
       return {
