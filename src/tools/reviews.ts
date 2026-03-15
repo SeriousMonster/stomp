@@ -23,7 +23,7 @@ export function registerReviewTools(server: McpServer) {
           "Comma-separated related resources to include (default: customerReviewResponses)"
         ),
       limit: z
-        .number()
+        .coerce.number()
         .min(1)
         .max(200)
         .optional()

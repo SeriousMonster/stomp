@@ -21,7 +21,7 @@ export function registerPricingTools(server: McpServer) {
           "Comma-separated related resources to include (default: territory)"
         ),
       limit: z
-        .number()
+        .coerce.number()
         .min(1)
         .max(200)
         .optional()
@@ -79,7 +79,7 @@ export function registerPricingTools(server: McpServer) {
     "List all available App Store territories (countries/regions).",
     {
       limit: z
-        .number()
+        .coerce.number()
         .min(1)
         .max(200)
         .optional()

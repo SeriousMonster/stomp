@@ -9,7 +9,7 @@ export function registerAppTools(server: McpServer) {
     "List all apps in App Store Connect. Returns app ID, name, bundle ID, SKU, and platform.",
     {
       limit: z
-        .number()
+        .coerce.number()
         .min(1)
         .max(200)
         .optional()

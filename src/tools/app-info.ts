@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
-import { buildParams, jsonResponse } from "../helpers.js";
+import { booleanParam, buildParams, jsonResponse } from "../helpers.js";
 
 export function registerAppInfoTools(server: McpServer) {
   server.tool(
@@ -331,15 +331,15 @@ export function registerAppInfoTools(server: McpServer) {
         .enum(["FIVE_AND_UNDER", "SIX_TO_EIGHT", "NINE_TO_ELEVEN"])
         .optional()
         .describe("Kids age band (for Made for Kids apps)"),
-      gambling: z.coerce.boolean().optional().describe("Real gambling"),
-      lootBox: z.coerce.boolean().optional().describe("Loot boxes / randomized purchases"),
-      unrestrictedWebAccess: z.coerce.boolean().optional().describe("Unrestricted web access"),
-      parentalControls: z.coerce.boolean().optional().describe("Parental controls"),
-      messagingAndChat: z.coerce.boolean().optional().describe("Messaging and chat"),
-      advertising: z.coerce.boolean().optional().describe("Advertising"),
-      userGeneratedContent: z.coerce.boolean().optional().describe("User generated content"),
-      healthOrWellnessTopics: z.coerce.boolean().optional().describe("Health or wellness topics"),
-      ageAssurance: z.coerce.boolean().optional().describe("Age assurance / verification"),
+      gambling: booleanParam.optional().describe("Real gambling"),
+      lootBox: booleanParam.optional().describe("Loot boxes / randomized purchases"),
+      unrestrictedWebAccess: booleanParam.optional().describe("Unrestricted web access"),
+      parentalControls: booleanParam.optional().describe("Parental controls"),
+      messagingAndChat: booleanParam.optional().describe("Messaging and chat"),
+      advertising: booleanParam.optional().describe("Advertising"),
+      userGeneratedContent: booleanParam.optional().describe("User generated content"),
+      healthOrWellnessTopics: booleanParam.optional().describe("Health or wellness topics"),
+      ageAssurance: booleanParam.optional().describe("Age assurance / verification"),
     },
     async ({
       id,

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
-import { buildParams, jsonResponse } from "../helpers.js";
+import { booleanParam, buildParams, jsonResponse } from "../helpers.js";
 
 export function registerInAppPurchaseTools(server: McpServer) {
   server.tool(
@@ -10,11 +10,9 @@ export function registerInAppPurchaseTools(server: McpServer) {
     {
       app_id: z.string().describe("The App Store Connect app ID"),
       filter_inAppPurchaseType: z
-        .string()
+        .enum(["CONSUMABLE", "NON_CONSUMABLE", "NON_RENEWING_SUBSCRIPTION"])
         .optional()
-        .describe(
-          "Filter by type (CONSUMABLE, NON_CONSUMABLE, NON_RENEWING_SUBSCRIPTION)"
-        ),
+        .describe("Filter by in-app purchase type"),
       filter_name: z.string().optional().describe("Filter by name"),
       filter_productId: z.string().optional().describe("Filter by product ID"),
       include: z
@@ -126,8 +124,7 @@ export function registerInAppPurchaseTools(server: McpServer) {
       id: z.string().describe("The in-app purchase ID"),
       name: z.string().optional().describe("Updated name"),
       reviewNote: z.string().optional().describe("Review note for App Review"),
-      familySharable: z
-        .boolean()
+      familySharable: booleanParam
         .optional()
         .describe("Whether the purchase is family sharable"),
     },

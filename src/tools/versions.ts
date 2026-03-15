@@ -18,11 +18,9 @@ export function registerVersionTools(server: McpServer) {
         .optional()
         .describe("Filter by platform"),
       filter_appStoreState: z
-        .string()
+        .enum(["ACCEPTED", "DEVELOPER_REJECTED", "DEVELOPER_REMOVED_FROM_SALE", "IN_REVIEW", "INVALID_BINARY", "METADATA_REJECTED", "PENDING_APPLE_RELEASE", "PENDING_DEVELOPER_RELEASE", "PREPARE_FOR_SUBMISSION", "PROCESSING_FOR_APP_STORE", "READY_FOR_REVIEW", "READY_FOR_SALE", "REJECTED", "REMOVED_FROM_SALE", "REPLACED_WITH_NEW_VERSION", "WAITING_FOR_EXPORT_COMPLIANCE", "WAITING_FOR_REVIEW"])
         .optional()
-        .describe(
-          "Filter by state (e.g., READY_FOR_SALE, PREPARE_FOR_SUBMISSION, WAITING_FOR_REVIEW)"
-        ),
+        .describe("Filter by App Store version state"),
       include: z
         .string()
         .optional()

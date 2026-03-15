@@ -56,10 +56,8 @@ export function registerCertificateTools(server: McpServer) {
     "Create a new signing certificate from a CSR.",
     {
       certificateType: z
-        .string()
-        .describe(
-          "Certificate type (e.g., IOS_DEVELOPMENT, IOS_DISTRIBUTION, MAC_APP_DEVELOPMENT, MAC_APP_DISTRIBUTION, DEVELOPER_ID_APPLICATION)"
-        ),
+        .enum(["IOS_DEVELOPMENT", "IOS_DISTRIBUTION", "MAC_APP_DEVELOPMENT", "MAC_APP_DISTRIBUTION", "MAC_INSTALLER_DISTRIBUTION", "DEVELOPER_ID_KEXT", "DEVELOPER_ID_APPLICATION", "DEVELOPMENT", "DISTRIBUTION"])
+        .describe("Certificate type"),
       csrContent: z
         .string()
         .describe("The certificate signing request (CSR) content in PEM format"),
@@ -103,15 +101,13 @@ export function registerCertificateTools(server: McpServer) {
     {
       filter_name: z.string().optional().describe("Filter by profile name"),
       filter_profileType: z
-        .string()
+        .enum(["IOS_APP_DEVELOPMENT", "IOS_APP_STORE", "IOS_APP_ADHOC", "IOS_APP_INHOUSE", "MAC_APP_DEVELOPMENT", "MAC_APP_STORE", "MAC_APP_DIRECT", "TVOS_APP_DEVELOPMENT", "TVOS_APP_STORE", "TVOS_APP_ADHOC", "TVOS_APP_INHOUSE", "MAC_CATALYST_APP_DEVELOPMENT", "MAC_CATALYST_APP_STORE", "MAC_CATALYST_APP_DIRECT"])
         .optional()
-        .describe(
-          "Filter by profile type (e.g., IOS_APP_DEVELOPMENT, IOS_APP_STORE, MAC_APP_DEVELOPMENT, MAC_APP_STORE)"
-        ),
+        .describe("Filter by profile type"),
       filter_profileState: z
-        .string()
+        .enum(["ACTIVE", "INVALID"])
         .optional()
-        .describe("Filter by profile state (e.g., ACTIVE, INVALID)"),
+        .describe("Filter by profile state"),
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ filter_name, filter_profileType, filter_profileState, limit }) => {
@@ -165,10 +161,8 @@ export function registerCertificateTools(server: McpServer) {
     {
       name: z.string().describe("Profile name"),
       profileType: z
-        .string()
-        .describe(
-          "Profile type (e.g., IOS_APP_DEVELOPMENT, IOS_APP_STORE, MAC_APP_DEVELOPMENT, MAC_APP_STORE)"
-        ),
+        .enum(["IOS_APP_DEVELOPMENT", "IOS_APP_STORE", "IOS_APP_ADHOC", "IOS_APP_INHOUSE", "MAC_APP_DEVELOPMENT", "MAC_APP_STORE", "MAC_APP_DIRECT", "TVOS_APP_DEVELOPMENT", "TVOS_APP_STORE", "TVOS_APP_ADHOC", "TVOS_APP_INHOUSE", "MAC_CATALYST_APP_DEVELOPMENT", "MAC_CATALYST_APP_STORE", "MAC_CATALYST_APP_DIRECT"])
+        .describe("Profile type"),
       bundleId_id: z.string().describe("The bundle ID resource ID"),
       certificate_ids: z
         .array(z.string())

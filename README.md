@@ -1,15 +1,15 @@
-# Stomp
+# STOMP — MCP Server for App Store Connect
 
-An MCP server with 162 tools covering the full App Store Connect API.
+Give Claude, Cursor, Windsurf, and other AI coding agents full access to the Apple App Store Connect API — 162 tools covering every major endpoint.
 
 [![npm](https://img.shields.io/npm/v/@seriousmonster/app-store-connect-mcp)](https://www.npmjs.com/package/@seriousmonster/app-store-connect-mcp)
 [![npm downloads](https://img.shields.io/npm/dm/@seriousmonster/app-store-connect-mcp)](https://www.npmjs.com/package/@seriousmonster/app-store-connect-mcp)
 [![license](https://img.shields.io/npm/l/@seriousmonster/app-store-connect-mcp)](./LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/SeriousMonster/stomp)](https://github.com/SeriousMonster/stomp)
 
-## What is this?
+## What is STOMP?
 
-Stomp is a [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants interact with the Apple App Store Connect API. It provides 162 dedicated tools covering apps, versions, localizations, TestFlight, builds, bundle IDs, capabilities, submissions, users, devices, reviews, screenshots, previews, analytics, pricing, certificates, provisioning profiles, in-app purchases, subscriptions, Game Center, Xcode Cloud, App Clips, sandbox testing, compliance, app events, phased releases, and more. For anything the dedicated tools don't cover, there's a generic `api_request` escape hatch that can hit any App Store Connect endpoint.
+STOMP is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Apple's App Store Connect API. It lets AI assistants manage your iOS, macOS, tvOS, and visionOS apps — TestFlight, builds, in-app purchases, subscriptions, App Store submissions, analytics, certificates, provisioning profiles, Game Center, Xcode Cloud, App Clips, sandbox testing, reviews, screenshots, pricing, and more. 162 dedicated tools plus a generic `api_request` escape hatch for any endpoint not yet covered.
 
 ## Prerequisites
 
@@ -43,7 +43,7 @@ npx @seriousmonster/app-store-connect-mcp
 
 ## Configuration
 
-Stomp requires three environment variables:
+STOMP requires three environment variables:
 
 | Variable | Description |
 |---|---|
@@ -83,7 +83,7 @@ Add to your Cursor MCP config (`~/.cursor/mcp.json`):
 
 ### Generic MCP client
 
-Any MCP client that supports stdio transports can run Stomp. Set the three environment variables and run `npx @seriousmonster/app-store-connect-mcp` as the server command.
+Any MCP-compatible client (Claude Desktop, Cline, Zed, etc.) can run STOMP. Set the three environment variables and run `npx @seriousmonster/app-store-connect-mcp` as the server command.
 
 ## Available tools
 

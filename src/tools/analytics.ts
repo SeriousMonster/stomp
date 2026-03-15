@@ -104,11 +104,9 @@ export function registerAnalyticsTools(server: McpServer) {
     {
       request_id: z.string().describe("The analytics report request ID"),
       filter_category: z
-        .string()
+        .enum(["APP_USAGE", "APP_STORE_ENGAGEMENT", "COMMERCE", "FRAMEWORK_USAGE", "PERFORMANCE"])
         .optional()
-        .describe(
-          "Filter by report category (e.g., APP_USAGE, APP_STORE_ENGAGEMENT, COMMERCE, FRAMEWORK_USAGE, PERFORMANCE)"
-        ),
+        .describe("Filter by report category"),
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ request_id, filter_category, limit }) => {
@@ -138,9 +136,9 @@ export function registerAnalyticsTools(server: McpServer) {
         .optional()
         .describe("Filter by processing date (ISO 8601 date string)"),
       filter_granularity: z
-        .string()
+        .enum(["DAILY", "WEEKLY", "MONTHLY"])
         .optional()
-        .describe("Filter by granularity (e.g., DAILY, WEEKLY, MONTHLY)"),
+        .describe("Filter by granularity"),
       limit: z.coerce.number().min(1).max(200).optional(),
     },
     async ({ report_id, filter_processingDate, filter_granularity, limit }) => {

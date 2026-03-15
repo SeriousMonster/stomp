@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
-import { buildParams, jsonResponse } from "../helpers.js";
+import { booleanParam, buildParams, jsonResponse } from "../helpers.js";
 
 export function registerSubscriptionTools(server: McpServer) {
   server.tool(
@@ -136,8 +136,7 @@ export function registerSubscriptionTools(server: McpServer) {
       group_id: z.string().describe("The subscription group ID"),
       name: z.string().describe("The name of the subscription"),
       productId: z.string().describe("A unique product ID for the subscription"),
-      familySharable: z
-        .boolean()
+      familySharable: booleanParam
         .optional()
         .describe("Whether the subscription is family sharable"),
       subscriptionPeriod: z
@@ -155,7 +154,7 @@ export function registerSubscriptionTools(server: McpServer) {
         .optional()
         .describe("Review note for App Review"),
       groupLevel: z
-        .number()
+        .coerce.number()
         .optional()
         .describe(
           "The level of the subscription within the group (1 is highest)"
@@ -207,8 +206,7 @@ export function registerSubscriptionTools(server: McpServer) {
     {
       id: z.string().describe("The subscription ID"),
       name: z.string().optional().describe("Updated name"),
-      familySharable: z
-        .boolean()
+      familySharable: booleanParam
         .optional()
         .describe("Whether the subscription is family sharable"),
       subscriptionPeriod: z
@@ -227,7 +225,7 @@ export function registerSubscriptionTools(server: McpServer) {
         .optional()
         .describe("Updated review note for App Review"),
       groupLevel: z
-        .number()
+        .coerce.number()
         .optional()
         .describe("Updated level within the subscription group"),
     },
@@ -479,7 +477,7 @@ export function registerSubscriptionTools(server: McpServer) {
         .enum(["PAY_AS_YOU_GO", "PAY_UP_FRONT", "FREE_TRIAL"])
         .describe("The offer mode"),
       numberOfPeriods: z
-        .number()
+        .coerce.number()
         .describe("Number of periods the offer is valid for"),
     },
     async ({

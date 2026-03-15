@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
-import { buildParams, jsonResponse } from "../helpers.js";
+import { booleanParam, buildParams, jsonResponse } from "../helpers.js";
 
 export function registerBetaDetailTools(server: McpServer) {
   server.tool(
@@ -248,7 +248,7 @@ export function registerBetaDetailTools(server: McpServer) {
       contactEmail: z.string().optional().describe("Contact email address"),
       demoAccountName: z.string().optional().describe("Demo account username"),
       demoAccountPassword: z.string().optional().describe("Demo account password"),
-      demoAccountRequired: z.coerce.boolean().optional().describe("Whether a demo account is required"),
+      demoAccountRequired: booleanParam.optional().describe("Whether a demo account is required"),
       notes: z.string().optional().describe("Additional notes for the reviewer"),
     },
     async ({

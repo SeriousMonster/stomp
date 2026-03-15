@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
-import { buildParams, jsonResponse } from "../helpers.js";
+import { booleanParam, buildParams, jsonResponse } from "../helpers.js";
 
 export function registerBuildTools(server: McpServer) {
   server.tool(
@@ -17,8 +17,7 @@ export function registerBuildTools(server: McpServer) {
         .enum(["PROCESSING", "FAILED", "INVALID", "VALID"])
         .optional()
         .describe("Filter by processing state"),
-      filter_expired: z
-        .boolean()
+      filter_expired: booleanParam
         .optional()
         .describe("Filter by expired status"),
       include: z

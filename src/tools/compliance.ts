@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
-import { buildParams, jsonResponse } from "../helpers.js";
+import { booleanParam, buildParams, jsonResponse } from "../helpers.js";
 
 export function registerComplianceTools(server: McpServer) {
   server.tool(
@@ -32,22 +32,19 @@ export function registerComplianceTools(server: McpServer) {
     "Create an app encryption declaration for an app.",
     {
       app_id: z.string().describe("The App Store Connect app ID"),
-      availableOnFrenchStore: z
-        .boolean()
+      availableOnFrenchStore: booleanParam
         .describe("Whether the app is available on the French App Store"),
       codeValue: z
         .string()
         .optional()
         .describe("The encryption code value"),
-      containsProprietaryCryptography: z
-        .boolean()
+      containsProprietaryCryptography: booleanParam
         .describe("Whether the app contains proprietary cryptography"),
-      containsThirdPartyCryptography: z
-        .boolean()
+      containsThirdPartyCryptography: booleanParam
         .describe("Whether the app contains third-party cryptography"),
-      platform: z.string().describe("The platform (e.g., IOS, MAC_OS)"),
-      usesEncryption: z.coerce.boolean().describe("Whether the app uses encryption"),
-      isExempt: z.coerce.boolean().describe("Whether the app is exempt from encryption regulations"),
+      platform: z.enum(["IOS", "MAC_OS"]).describe("The platform"),
+      usesEncryption: booleanParam.describe("Whether the app uses encryption"),
+      isExempt: booleanParam.describe("Whether the app is exempt from encryption regulations"),
     },
     async ({
       app_id,

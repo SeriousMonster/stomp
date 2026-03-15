@@ -1,3 +1,19 @@
+import { z } from "zod";
+
+/**
+ * Boolean schema that correctly handles string "true"/"false" coercion.
+ * z.coerce.boolean() is broken for strings because Boolean("false") === true.
+ * This preprocessor converts string "true"/"false" to actual booleans first.
+ */
+export const booleanParam = z.preprocess((val) => {
+  if (typeof val === "string") {
+    const lower = val.toLowerCase();
+    if (lower === "true" || lower === "1") return true;
+    if (lower === "false" || lower === "0" || lower === "") return false;
+  }
+  return val;
+}, z.boolean());
+
 // Helper to build query params, filtering out undefined values
 export function buildParams(entries: Record<string, string | number | boolean | undefined>): Record<string, string> {
   const params: Record<string, string> = {};

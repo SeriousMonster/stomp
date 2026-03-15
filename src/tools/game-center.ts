@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
-import { buildParams, jsonResponse } from "../helpers.js";
+import { booleanParam, buildParams, jsonResponse } from "../helpers.js";
 
 export function registerGameCenterTools(server: McpServer) {
   server.tool(
@@ -251,10 +251,9 @@ export function registerGameCenterTools(server: McpServer) {
       referenceName: z.string().describe("A reference name for the achievement"),
       vendorIdentifier: z.string().describe("A unique vendor identifier for the achievement"),
       points: z.coerce.number().describe("Point value of the achievement"),
-      showBeforeEarned: z
-        .boolean()
+      showBeforeEarned: booleanParam
         .describe("Whether to show the achievement before it is earned"),
-      repeatable: z.coerce.boolean().describe("Whether the achievement can be earned multiple times"),
+      repeatable: booleanParam.describe("Whether the achievement can be earned multiple times"),
     },
     async ({ detail_id, referenceName, vendorIdentifier, points, showBeforeEarned, repeatable }) => {
       const body = {
@@ -291,11 +290,10 @@ export function registerGameCenterTools(server: McpServer) {
       id: z.string().describe("The Game Center achievement ID"),
       referenceName: z.string().optional().describe("Updated reference name"),
       points: z.coerce.number().optional().describe("Updated point value"),
-      showBeforeEarned: z
-        .boolean()
+      showBeforeEarned: booleanParam
         .optional()
         .describe("Updated show before earned setting"),
-      repeatable: z.coerce.boolean().optional().describe("Updated repeatable setting"),
+      repeatable: booleanParam.optional().describe("Updated repeatable setting"),
     },
     async ({ id, referenceName, points, showBeforeEarned, repeatable }) => {
       const attributes: Record<string, unknown> = {};

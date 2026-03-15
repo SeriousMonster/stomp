@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
-import { jsonResponse } from "../helpers.js";
+import { booleanParam, jsonResponse } from "../helpers.js";
 
 export function registerSandboxTools(server: McpServer) {
   server.tool(
@@ -24,8 +24,7 @@ export function registerSandboxTools(server: McpServer) {
         .string()
         .optional()
         .describe("Territory code for the sandbox tester (e.g., USA, GBR)"),
-      interruptPurchases: z
-        .boolean()
+      interruptPurchases: booleanParam
         .optional()
         .describe("Whether to interrupt purchases for testing"),
       subscriptionRenewalRate: z

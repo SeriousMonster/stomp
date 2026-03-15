@@ -1,7 +1,7 @@
 {
   "name": "@seriousmonster/app-store-connect-mcp",
   "version": "0.2.0",
-  "description": "Stomp — MCP server for the Apple App Store Connect API. Manage apps, versions, localizations, TestFlight, builds, and more via Model Context Protocol.",
+  "description": "STOMP — MCP server for the Apple App Store Connect API. 162 tools for managing iOS/macOS apps, TestFlight, builds, in-app purchases, subscriptions, certificates, App Store submissions, analytics, Game Center, Xcode Cloud, and more.",
   "type": "module",
   "bin": {
     "app-store-connect-mcp": "./dist/index.js"
@@ -16,17 +16,25 @@
   },
   "keywords": [
     "mcp",
-    "app-store-connect",
-    "apple",
+    "mcp-server",
     "model-context-protocol",
-    "stomp",
+    "app-store-connect",
+    "app-store-connect-api",
     "appstoreconnect",
-    "testflight",
+    "apple",
+    "apple-developer",
     "app-store",
     "ios",
-    "mcp-server",
+    "macos",
+    "testflight",
+    "in-app-purchase",
+    "subscriptions",
+    "xcode-cloud",
+    "game-center",
     "claude",
-    "ai"
+    "cursor",
+    "ai",
+    "stomp"
   ],
   "author": "seriousmonster",
   "license": "MIT",

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { apiRequest } from "../client.js";
-import { buildParams, jsonResponse } from "../helpers.js";
+import { booleanParam, buildParams, jsonResponse } from "../helpers.js";
 
 export function registerBetaTools(server: McpServer) {
   server.tool(
@@ -41,17 +41,15 @@ export function registerBetaTools(server: McpServer) {
     {
       app_id: z.string().describe("The App Store Connect app ID"),
       name: z.string().describe("Name of the beta group"),
-      publicLinkEnabled: z
-        .boolean()
+      publicLinkEnabled: booleanParam
         .optional()
         .default(false)
         .describe("Enable public link for testers"),
       publicLinkLimit: z
-        .number()
+        .coerce.number()
         .optional()
         .describe("Max number of testers via public link"),
-      feedbackEnabled: z
-        .boolean()
+      feedbackEnabled: booleanParam
         .optional()
         .default(true)
         .describe("Enable feedback from testers"),

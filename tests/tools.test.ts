@@ -190,6 +190,189 @@ describe("tool registration", () => {
   });
 });
 
+describe("schema coercion and validation", () => {
+  let server: McpServer;
+
+  beforeEach(() => {
+    server = createServerWithAllTools();
+    mockedApiRequest.mockReset();
+    mockedApiRequestAllPages.mockReset();
+    mockedApiRequest.mockResolvedValue({ data: [] });
+  });
+
+  /**
+   * Get the Zod schema for a tool's input.
+   * MCP SDK stores schemas in _registeredTools[name].inputSchema as a ZodObject.
+   */
+  function getToolSchema(name: string) {
+    const tools = getRegisteredTools(server);
+    return tools[name].inputSchema;
+  }
+
+  // --- Number coercion ---
+
+  it("coerces string '10' to number 10 for limit params (list_apps)", () => {
+    const schema = getToolSchema("list_apps");
+    const parsed = schema.parse({ limit: "10" });
+    expect(parsed.limit).toBe(10);
+    expect(typeof parsed.limit).toBe("number");
+  });
+
+  it("coerces string '50' to number for publicLinkLimit (create_beta_group)", () => {
+    const schema = getToolSchema("create_beta_group");
+    const parsed = schema.parse({
+      app_id: "app-1",
+      name: "Test",
+      publicLinkLimit: "50",
+    });
+    expect(parsed.publicLinkLimit).toBe(50);
+  });
+
+  it("coerces string '1' to number for groupLevel (create_subscription)", () => {
+    const schema = getToolSchema("create_subscription");
+    const parsed = schema.parse({
+      group_id: "g-1",
+      name: "Pro",
+      productId: "com.pro",
+      subscriptionPeriod: "ONE_MONTH",
+      groupLevel: "1",
+    });
+    expect(parsed.groupLevel).toBe(1);
+  });
+
+  it("coerces string '3' to number for numberOfPeriods (create_subscription_introductory_offer)", () => {
+    const schema = getToolSchema("create_subscription_introductory_offer");
+    const parsed = schema.parse({
+      sub_id: "s-1",
+      territory_id: "USA",
+      duration: "ONE_MONTH",
+      offerMode: "FREE_TRIAL",
+      numberOfPeriods: "3",
+    });
+    expect(parsed.numberOfPeriods).toBe(3);
+  });
+
+  // --- Boolean coercion ---
+
+  it("coerces string 'true'/'false' to boolean for publicLinkEnabled/feedbackEnabled", () => {
+    const schema = getToolSchema("create_beta_group");
+    const parsed = schema.parse({
+      app_id: "app-1",
+      name: "Test",
+      publicLinkEnabled: "true",
+      feedbackEnabled: "false",
+    });
+    expect(parsed.publicLinkEnabled).toBe(true);
+    expect(parsed.feedbackEnabled).toBe(false);
+  });
+
+  it("coerces string 'true' for filter_expired (list_builds)", () => {
+    const schema = getToolSchema("list_builds");
+    const parsed = schema.parse({
+      app_id: "app-1",
+      filter_expired: "true",
+    });
+    expect(parsed.filter_expired).toBe(true);
+  });
+
+  it("coerces string 'true' for familySharable (update_in_app_purchase)", () => {
+    const schema = getToolSchema("update_in_app_purchase");
+    const parsed = schema.parse({
+      id: "iap-1",
+      familySharable: "true",
+    });
+    expect(parsed.familySharable).toBe(true);
+  });
+
+  it("coerces string 'false' for interruptPurchases (update_sandbox_tester)", () => {
+    const schema = getToolSchema("update_sandbox_tester");
+    const parsed = schema.parse({
+      id: "st-1",
+      interruptPurchases: "false",
+    });
+    expect(parsed.interruptPurchases).toBe(false);
+  });
+
+  // --- Enum validation ---
+
+  it("rejects invalid certificate type in create_certificate", () => {
+    const schema = getToolSchema("create_certificate");
+    expect(() => schema.parse({
+      certificateType: "INVALID_TYPE",
+      csrContent: "-----BEGIN...",
+    })).toThrow();
+  });
+
+  it("accepts valid certificate type in create_certificate", () => {
+    const schema = getToolSchema("create_certificate");
+    const parsed = schema.parse({
+      certificateType: "IOS_DEVELOPMENT",
+      csrContent: "-----BEGIN...",
+    });
+    expect(parsed.certificateType).toBe("IOS_DEVELOPMENT");
+  });
+
+  it("rejects invalid profile state filter", () => {
+    const schema = getToolSchema("list_profiles");
+    expect(() => schema.parse({
+      filter_profileState: "BOGUS",
+    })).toThrow();
+  });
+
+  it("rejects invalid in-app purchase type filter", () => {
+    const schema = getToolSchema("list_in_app_purchases");
+    expect(() => schema.parse({
+      app_id: "app-1",
+      filter_inAppPurchaseType: "INVALID",
+    })).toThrow();
+  });
+
+  it("rejects invalid app store version state filter", () => {
+    const schema = getToolSchema("list_app_store_versions");
+    expect(() => schema.parse({
+      app_id: "app-1",
+      filter_appStoreState: "NOT_A_STATE",
+    })).toThrow();
+  });
+
+  it("rejects invalid platform in create_app_encryption_declaration", () => {
+    const schema = getToolSchema("create_app_encryption_declaration");
+    expect(() => schema.parse({
+      app_id: "app-1",
+      availableOnFrenchStore: true,
+      containsProprietaryCryptography: false,
+      containsThirdPartyCryptography: false,
+      platform: "WINDOWS",
+      usesEncryption: false,
+      isExempt: true,
+    })).toThrow();
+  });
+
+  it("accepts valid platform in create_app_encryption_declaration", () => {
+    const schema = getToolSchema("create_app_encryption_declaration");
+    const parsed = schema.parse({
+      app_id: "app-1",
+      availableOnFrenchStore: true,
+      containsProprietaryCryptography: false,
+      containsThirdPartyCryptography: false,
+      platform: "IOS",
+      usesEncryption: false,
+      isExempt: true,
+    });
+    expect(parsed.platform).toBe("IOS");
+  });
+
+  it("rejects limit below min", () => {
+    const schema = getToolSchema("list_apps");
+    expect(() => schema.parse({ limit: "0" })).toThrow();
+  });
+
+  it("rejects limit above max", () => {
+    const schema = getToolSchema("list_apps");
+    expect(() => schema.parse({ limit: "201" })).toThrow();
+  });
+});
+
 describe("tool handler execution", () => {
   let server: McpServer;
 
