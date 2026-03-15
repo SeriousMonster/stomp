@@ -296,7 +296,6 @@ export function registerAppInfoTools(server: McpServer) {
         .enum(["NONE", "INFREQUENT_OR_MILD", "FREQUENT_OR_INTENSE"])
         .optional()
         .describe("Simulated gambling"),
-      gambling: z.boolean().optional().describe("Real gambling"),
       horrorOrFearThemes: z
         .enum(["NONE", "INFREQUENT_OR_MILD", "FREQUENT_OR_INTENSE"])
         .optional()
@@ -333,13 +332,23 @@ export function registerAppInfoTools(server: McpServer) {
         .enum(["NONE", "INFREQUENT_OR_MILD", "FREQUENT_OR_INTENSE"])
         .optional()
         .describe("Realistic prolonged graphic or sadistic violence"),
+      gunsOrOtherWeapons: z
+        .enum(["NONE", "INFREQUENT_OR_MILD", "FREQUENT_OR_INTENSE"])
+        .optional()
+        .describe("Guns or other weapons"),
       kidsAgeBand: z
         .enum(["FIVE_AND_UNDER", "SIX_TO_EIGHT", "NINE_TO_ELEVEN"])
         .optional()
         .describe("Kids age band (for Made for Kids apps)"),
-      gamblingAndContests: z.boolean().optional().describe("Gambling and contests"),
+      gambling: z.boolean().optional().describe("Real gambling"),
+      lootBox: z.boolean().optional().describe("Loot boxes / randomized purchases"),
       unrestrictedWebAccess: z.boolean().optional().describe("Unrestricted web access"),
-      seventeenPlus: z.boolean().optional().describe("17+ rating"),
+      parentalControls: z.boolean().optional().describe("Parental controls"),
+      messagingAndChat: z.boolean().optional().describe("Messaging and chat"),
+      advertising: z.boolean().optional().describe("Advertising"),
+      userGeneratedContent: z.boolean().optional().describe("User generated content"),
+      healthOrWellnessTopics: z.boolean().optional().describe("Health or wellness topics"),
+      ageAssurance: z.boolean().optional().describe("Age assurance / verification"),
     },
     async ({
       id,
@@ -356,17 +365,22 @@ export function registerAppInfoTools(server: McpServer) {
       violenceCartoonOrFantasy,
       violenceRealistic,
       violenceRealisticProlongedGraphicOrSadistic,
+      gunsOrOtherWeapons,
       kidsAgeBand,
-      gamblingAndContests,
+      lootBox,
       unrestrictedWebAccess,
-      seventeenPlus,
+      parentalControls,
+      messagingAndChat,
+      advertising,
+      userGeneratedContent,
+      healthOrWellnessTopics,
+      ageAssurance,
     }) => {
       const attributes: Record<string, unknown> = {};
       if (alcoholTobaccoOrDrugUseOrReferences !== undefined)
         attributes.alcoholTobaccoOrDrugUseOrReferences = alcoholTobaccoOrDrugUseOrReferences;
       if (contests !== undefined) attributes.contests = contests;
       if (gamblingSimulated !== undefined) attributes.gamblingSimulated = gamblingSimulated;
-      if (gambling !== undefined) attributes.gambling = gambling;
       if (horrorOrFearThemes !== undefined) attributes.horrorOrFearThemes = horrorOrFearThemes;
       if (matureOrSuggestiveThemes !== undefined)
         attributes.matureOrSuggestiveThemes = matureOrSuggestiveThemes;
@@ -384,11 +398,19 @@ export function registerAppInfoTools(server: McpServer) {
       if (violenceRealisticProlongedGraphicOrSadistic !== undefined)
         attributes.violenceRealisticProlongedGraphicOrSadistic =
           violenceRealisticProlongedGraphicOrSadistic;
+      if (gunsOrOtherWeapons !== undefined) attributes.gunsOrOtherWeapons = gunsOrOtherWeapons;
       if (kidsAgeBand !== undefined) attributes.kidsAgeBand = kidsAgeBand;
-      if (gamblingAndContests !== undefined) attributes.gamblingAndContests = gamblingAndContests;
+      if (gambling !== undefined) attributes.gambling = gambling;
+      if (lootBox !== undefined) attributes.lootBox = lootBox;
       if (unrestrictedWebAccess !== undefined)
         attributes.unrestrictedWebAccess = unrestrictedWebAccess;
-      if (seventeenPlus !== undefined) attributes.seventeenPlus = seventeenPlus;
+      if (parentalControls !== undefined) attributes.parentalControls = parentalControls;
+      if (messagingAndChat !== undefined) attributes.messagingAndChat = messagingAndChat;
+      if (advertising !== undefined) attributes.advertising = advertising;
+      if (userGeneratedContent !== undefined) attributes.userGeneratedContent = userGeneratedContent;
+      if (healthOrWellnessTopics !== undefined)
+        attributes.healthOrWellnessTopics = healthOrWellnessTopics;
+      if (ageAssurance !== undefined) attributes.ageAssurance = ageAssurance;
 
       const body = {
         data: {
