@@ -32,7 +32,7 @@ import { getAuthConfig } from "./auth.js";
 
 const server = new McpServer({
   name: "app-store-connect",
-  version: "0.2.0",
+  version: "0.2.1",
 });
 
 // Register all tool groups
@@ -79,6 +79,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error("Fatal error:", error);
+  console.error("Fatal error:", error instanceof Error ? error.message : error);
   process.exit(1);
 });

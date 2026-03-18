@@ -1,6 +1,6 @@
 {
   "name": "@seriousmonster/app-store-connect-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "STOMP — MCP server for the Apple App Store Connect API. 162 tools for managing iOS/macOS apps, TestFlight, builds, in-app purchases, subscriptions, certificates, App Store submissions, analytics, Game Center, Xcode Cloud, and more.",
   "type": "module",
   "bin": {

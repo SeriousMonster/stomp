@@ -24,23 +24,44 @@ export function getAuthConfig(): AuthConfig {
   }
 
   // Resolve ~ in path
+  if (p8Path.startsWith("~") && !process.env.HOME) {
+    throw new Error(
+      "HOME environment variable is not set — cannot resolve ~ in APP_STORE_CONNECT_P8_PATH"
+    );
+  }
   const resolvedPath = p8Path.replace(/^~/, process.env.HOME || "");
-  const privateKey = readFileSync(resolve(resolvedPath), "utf8");
+
+  let privateKey: string;
+  try {
+    privateKey = readFileSync(resolve(resolvedPath), "utf8");
+  } catch {
+    throw new Error(
+      "Failed to read .p8 private key file. Check that APP_STORE_CONNECT_P8_PATH points to a valid file."
+    );
+  }
 
   cachedConfig = { keyId, issuerId, privateKey };
   return cachedConfig;
 }
 
-export function generateToken(): string {
-  const { keyId, issuerId, privateKey } = getAuthConfig();
+let cachedToken: { token: string; expiresAt: number } | null = null;
 
+export function generateToken(): string {
   const now = Math.floor(Date.now() / 1000);
 
-  return jwt.sign(
+  // Reuse cached token if it has at least 5 minutes left
+  if (cachedToken && cachedToken.expiresAt - now > 5 * 60) {
+    return cachedToken.token;
+  }
+
+  const { keyId, issuerId, privateKey } = getAuthConfig();
+  const exp = now + 20 * 60; // 20 minutes max
+
+  const token = jwt.sign(
     {
       iss: issuerId,
       iat: now,
-      exp: now + 20 * 60, // 20 minutes max
+      exp,
       aud: "appstoreconnect-v1",
     },
     privateKey,
@@ -53,4 +74,7 @@ export function generateToken(): string {
       },
     }
   );
+
+  cachedToken = { token, expiresAt: exp };
+  return token;
 }

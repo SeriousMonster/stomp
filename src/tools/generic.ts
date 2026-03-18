@@ -32,14 +32,19 @@ Auth is handled automatically. See https://developer.apple.com/documentation/app
         ),
     },
     async ({ method, path, params, body }) => {
+      if (!/^\/v\d+\//.test(path)) {
+        return errorResponse("Path must start with a versioned prefix (e.g., /v1/ or /v2/)");
+      }
+
       let parsedBody: unknown;
       if (body) {
         try {
           parsedBody = JSON.parse(body);
         } catch {
-          return errorResponse(`Error: Invalid JSON in request body: ${body}`);
+          return errorResponse(`Invalid JSON in request body: ${body}`);
         }
       }
+
       const response = await apiRequest(method, path, parsedBody, params);
 
       return jsonResponse(response);

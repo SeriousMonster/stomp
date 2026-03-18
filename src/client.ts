@@ -44,6 +44,7 @@ export async function apiRequest(
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
+    signal: AbortSignal.timeout(30_000),
   });
 
   const text = await response.text();
@@ -95,7 +96,7 @@ export async function apiRequestAllPages(
     }
 
     const nextUrl = response.links?.next;
-    if (!nextUrl) break;
+    if (!nextUrl || !nextUrl.startsWith(BASE_URL)) break;
 
     // Parse the next URL to extract path and params
     const next = new URL(nextUrl);
